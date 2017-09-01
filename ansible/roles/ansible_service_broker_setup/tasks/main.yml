@@ -1,4 +1,13 @@
 ---
+  - name: Waiting 1 minutes for service-catalog
+    action: >-
+      shell "{{ oc_cmd }}" get deployments -n {{ oc_service_catalog }} apiserver
+      -o go-template={% raw %}'{{ .status.availableReplicas }}'{% endraw %}
+    register: apiserver_deployment
+    until: apiserver_deployment.stdout == '1'
+    retries: 6
+    delay: 10
+
   - name: Curling ansible-service-broker-all.yaml
     get_url:
       url: "{{ asb_template_url }}"
