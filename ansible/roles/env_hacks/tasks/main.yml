@@ -24,6 +24,9 @@
     become: true
 
   - block:
+    - name: Give service-catalog permissions it needs
+      shell: "{{ oc_cmd }} adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:{{ oc_service_catalog }}:service-catalog-controller"
+
     - block:
       - name: Update service-catalog (OpenShift 3.6)
         block:
