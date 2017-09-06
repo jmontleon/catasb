@@ -81,6 +81,8 @@
         -p REFRESH_INTERVAL={{ broker_bootstrap_refresh_interval }}
         -p TAG={{ apbtag | default('latest') }}
         -p SANDBOX_ROLE={{ broker_sandbox_role }}
+        {% if broker_kind is defined %}-p BROKER_KIND={{ broker_kind }}{% endif %}
+        {% if broker_auth is defined %}-p BROKER_AUTH='{{ broker_auth }}'{% endif %}
     when: "not rcm"
 
   - name: Process template "{{ local_target_asb_template }}"
