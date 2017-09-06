@@ -32,6 +32,14 @@
     register: new_asb_project
     when: project.stdout.find( asb_project ) == -1
 
+  - name: Update broker settings if not using ssl
+    set_fact:
+      asb_scheme: http
+      broker_endpoint_termination: edge
+      broker_insecure_mode: true
+      broker_insecure_edge: Allow
+    when: not broker_ssl
+
   - name: Check that termination and insecure settings will work
     fail:
       msg: "The current configuration of termination: {{ broker_endpoint_termination|lower }}
