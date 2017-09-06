@@ -390,4 +390,3 @@
     fail:
       msg: "Failed to get the service-catalog project"
     when: oc_service_catalog == ""
-

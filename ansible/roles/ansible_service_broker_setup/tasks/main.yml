@@ -77,13 +77,20 @@
         -p REGISTRY_NAME={{ broker_registry_name }}
         -p ENABLE_BASIC_AUTH={{ broker_enable_basic_auth }}
         -p INSECURE={{ broker_insecure_mode|lower }}
+        -p INSECURE_EDGE={{ broker_insecure_edge }}
         -p TERMINATION={{ broker_endpoint_termination }}
         -p REFRESH_INTERVAL={{ broker_bootstrap_refresh_interval }}
         -p TAG={{ apbtag | default('latest') }}
         -p SANDBOX_ROLE={{ broker_sandbox_role }}
-        {% if broker_kind is defined %}-p BROKER_KIND={{ broker_kind }}{% endif %}
-        {% if broker_auth is defined %}-p BROKER_AUTH='{{ broker_auth }}'{% endif %}
     when: "not rcm"
+
+  - name: Update Broker Kind and Auth when using coalmine
+    set_fact:
+      cmd_process_asb_template: >-
+        {{ cmd_process_asb_template }}
+        -p BROKER_KIND='ServiceBroker'
+        -p BROKER_AUTH='{ "basic": { "secretRef": { "namespace": "ansible-service-broker", "name": "asb-auth-secret" } } }'
+    when: coalmine is defined and coalmine
 
   - name: Process template "{{ local_target_asb_template }}"
     shell: >
