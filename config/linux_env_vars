@@ -1,4 +1,4 @@
-export PUBLIC_IP="$(ip addr show docker0 | grep -Po 'inet \K[\d.]+')"
+export PUBLIC_IP="$(ip addr show lo | grep -Po 'inet \K[\d.]+')"
 
 export HOSTNAME="${PUBLIC_IP}"
 export OPENSHIFT_ROUTING_SUFFIX="${PUBLIC_IP}.nip.io"
